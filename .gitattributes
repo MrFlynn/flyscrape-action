@@ -1,0 +1,2 @@
+# Ignore stuff in dist directory for linguist stats.
+dist/** -diff linguist-generated=true
