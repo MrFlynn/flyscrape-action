@@ -1,0 +1,23 @@
+name: Run Flyscrape Scripts
+description: Executes Flyscrape scripts through Github Actions.
+author: Nick Pleatsikas
+branding:
+  color: white
+  icon: terminal
+inputs:
+  version:
+    description: The version of Flyscrape to run the script with.
+    required: false
+    default: latest
+  args:
+    description: Command line arguments for Flyscrape.
+    required: false
+  script:
+    description: Path to Flyscrape script.
+    required: true
+outputs:
+  output:
+    description: JSON output from script.
+runs:
+  using: "node20"
+  main: "dist/index.js"
