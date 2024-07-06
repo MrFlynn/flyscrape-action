@@ -1,4 +1,4 @@
-import { describe, expect, it, jest } from "@jest/globals";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { DeepPick } from "ts-deep-pick";
 
 import { getInput } from "@actions/core";
@@ -7,7 +7,6 @@ import { components } from "@octokit/openapi-types";
 
 import { getAssetURL } from "../src/github";
 import { OS, Arch } from "../src/config";
-import { beforeEach } from "node:test";
 
 // Custom picked type so we don't need to initialize a giant object.
 type GetReleaseByTagResponse = components["schemas"]["release"];

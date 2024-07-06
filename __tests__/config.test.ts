@@ -1,24 +1,34 @@
-import { describe, expect, it, jest } from "@jest/globals";
-import { when } from "jest-when";
+import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 
-import * as core from "@actions/core";
+import { getInput } from "@actions/core";
 import { arch, platform } from "os";
 
 import * as config from "../src/config";
 
 // Setup mocks.
 jest.mock("os");
-const getInputSpy = jest.spyOn(core, "getInput");
+jest.mock("@actions/core", () => ({
+  getInput: jest.fn(),
+}));
 
 describe("getInputs", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
+
   it("returns inputs from simple case", () => {
-    when(getInputSpy)
-      .calledWith("version")
-      .mockReturnValue("1.0.0")
-      .calledWith("args")
-      .mockReturnValue("hello world")
-      .calledWith("script", { required: true })
-      .mockReturnValue("script.js");
+    (getInput as jest.Mock).mockImplementation((name, _) => {
+      switch (name) {
+        case "version":
+          return "1.0.0";
+        case "args":
+          return "hello world";
+        case "script":
+          return "script.js";
+        default:
+          throw `Unexpected config name ${name}`;
+      }
+    });
 
     expect(config.getInputs()).toStrictEqual({
       version: "1.0.0",
@@ -28,13 +38,18 @@ describe("getInputs", () => {
   });
 
   it("returns latest when version is not given", () => {
-    when(getInputSpy)
-      .calledWith("version")
-      .mockReturnValue("")
-      .calledWith("args")
-      .mockReturnValue("hello world")
-      .calledWith("script", { required: true })
-      .mockReturnValue("script.js");
+    (getInput as jest.Mock).mockImplementation((name, _) => {
+      switch (name) {
+        case "version":
+          return "";
+        case "args":
+          return "hello world";
+        case "script":
+          return "script.js";
+        default:
+          throw `Unexpected config name ${name}`;
+      }
+    });
 
     expect(config.getInputs()).toStrictEqual({
       version: "latest",
