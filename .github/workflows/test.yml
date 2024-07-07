@@ -1,0 +1,33 @@
+name: tests
+on:
+  push:
+    paths:
+      - .github/workflows/test.yml
+      - __tests__/*.ts
+      - src/*.ts
+      - package.json
+      - package-lock.json
+jobs:
+  unit-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - run: npm test
+  build-and-run-action:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - run: npm ci
+      - run: npm run build
+      - uses: ./
+        id: run-action
+        with:
+          script: examples/script.js
+      - run: 'echo "${{ steps.run-action.outputs.output }}" | jq'
