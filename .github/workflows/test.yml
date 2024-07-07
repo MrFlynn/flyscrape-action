@@ -32,4 +32,4 @@ jobs:
           script: examples/script.js
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - run: 'echo "${{ steps.run-action.outputs.output }}" | jq'
+      - run: echo "${{ steps.run-action.outputs.output }}"
