@@ -10,6 +10,6 @@ describe("saveBinary", () => {
     const path = await saveBinary(testURL);
 
     expect(existsSync(path)).toBe(true);
-    expect(statSync(path)).toMatchObject({ mode: 33188 });
+    expect(statSync(path)).toMatchObject({ mode: 33261 });
   }, 20000);
 });

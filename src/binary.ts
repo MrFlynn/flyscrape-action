@@ -16,7 +16,7 @@ export async function saveBinary(url: string): Promise<string> {
   });
 
   const binaryPath = path.join(directory, binName);
-  fs.chmodSync(binaryPath, 0o644);
+  fs.chmodSync(binaryPath, 0o755);
 
   return binaryPath;
 }
