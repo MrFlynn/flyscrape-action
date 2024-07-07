@@ -17,7 +17,7 @@ async function getTagFromVersion(version: string): Promise<string> {
     return version;
   }
 
-  const octokit = github.getOctokit(core.getInput("github-token"));
+  const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
 
   var tags: string[] = [];
   const { data } = await octokit.rest.repos.listTags({

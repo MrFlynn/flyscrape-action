@@ -1,7 +1,6 @@
 import { beforeEach, describe, expect, it, jest } from "@jest/globals";
 import { DeepPick } from "ts-deep-pick";
 
-import { getInput } from "@actions/core";
 import { getOctokit } from "@actions/github";
 import { components } from "@octokit/openapi-types";
 
@@ -19,10 +18,6 @@ type OnlyAssetURLForRelease = DeepPick<
 >;
 
 // Setup mocks
-jest.mock("@actions/core", () => ({
-  getInput: jest.fn(),
-}));
-
 jest.mock("@actions/github", () => ({
   getOctokit: jest.fn(),
 }));
@@ -33,8 +28,6 @@ describe("getAssetURL", () => {
   });
 
   it("return url for v0.8.0 for linux/amd64", async () => {
-    (getInput as jest.Mock).mockReturnValueOnce("gh-token");
-
     const expectedURL =
       "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz";
     const mockOctokit = {
@@ -59,8 +52,6 @@ describe("getAssetURL", () => {
   });
 
   it("return v0.9.0 url for latest for linux/amd64", async () => {
-    (getInput as jest.Mock).mockReturnValueOnce("gh-token");
-
     const mockOctokit = {
       rest: {
         repos: {
@@ -102,8 +93,6 @@ describe("getAssetURL", () => {
   });
 
   it("throws error for invalid latest version", async () => {
-    (getInput as jest.Mock).mockReturnValueOnce("gh-token");
-
     const mockOctokit = {
       rest: {
         repos: {
@@ -126,8 +115,6 @@ describe("getAssetURL", () => {
   });
 
   it("throws error if unable to locate specified version", async () => {
-    (getInput as jest.Mock).mockReturnValueOnce("gh-token");
-
     const expectedURL =
       "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz";
     const mockOctokit = {

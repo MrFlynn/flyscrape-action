@@ -18,6 +18,10 @@ Actions.
 
     # Path to script executed by Flyscrape. This input is required.
     script: ''
+  env:
+    # Required to access Github API to find download URL for specific Flyscrape
+    # version.
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ## Getting Script Output
