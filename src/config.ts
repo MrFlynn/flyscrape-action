@@ -10,7 +10,10 @@ export interface Inputs {
 export function getInputs(): Inputs {
   return {
     version: core.getInput("version") || "latest",
-    args: core.getInput("args").split(" "),
+    args: core
+      .getInput("args")
+      .split(" ")
+      .filter((el) => el !== ""),
     script: core.getInput("script", { required: true }),
   };
 }

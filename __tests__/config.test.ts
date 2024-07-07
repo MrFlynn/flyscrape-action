@@ -57,6 +57,27 @@ describe("getInputs", () => {
       script: "script.js",
     });
   });
+
+  it("returns empty args list when none are given", () => {
+    (getInput as jest.Mock).mockImplementation((name, _) => {
+      switch (name) {
+        case "version":
+          return "";
+        case "args":
+          return "";
+        case "script":
+          return "script.js";
+        default:
+          throw `Unexpected config name ${name}`;
+      }
+    });
+
+    expect(config.getInputs()).toStrictEqual({
+      version: "latest",
+      args: [],
+      script: "script.js",
+    });
+  });
 });
 
 describe("getPlatform", () => {
