@@ -1,4 +1,7 @@
 # flyscrape-action
+
+[![tests](https://github.com/MrFlynn/flyscrape-action/actions/workflows/test.yml/badge.svg)](https://github.com/MrFlynn/flyscrape-action/actions/workflows/test.yml)
+
 Run [Flyscrape](https://github.com/philippta/flyscrape) scripts using Github
 Actions.
 
