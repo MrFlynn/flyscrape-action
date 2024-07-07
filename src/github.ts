@@ -47,7 +47,7 @@ export async function getAssetURL(
 ): Promise<string> {
   const tag: string = await getTagFromVersion(version);
 
-  const octokit = github.getOctokit(core.getInput("github-token"));
+  const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
   const { data } = await octokit.rest.repos.getReleaseByTag({
     owner: owner,
     repo: repo,
