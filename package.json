@@ -4,7 +4,7 @@
   "description": "Github action to execute flyscrape scripts",
   "main": "src/index.ts",
   "scripts": {
-    "build": "ncc build src/index.ts -o dist --source-map --minify",
+    "build": "ncc build src/index.ts -o dist --source-map --minify --license licenses.txt",
     "test": "jest"
   },
   "repository": {
