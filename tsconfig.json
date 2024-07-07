@@ -9,7 +9,8 @@
     "outDir": "./dist",
     "forceConsistentCasingInFileNames": true,
     "skipLibCheck": true,
-    "newLine": "lf"
+    "newLine": "lf",
+    "esModuleInterop": true
   },
   "exclude": ["./dist", "./node_modules", "./__tests__", "jest.config.ts"]
 }

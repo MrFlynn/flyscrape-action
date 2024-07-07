@@ -1,8 +1,7 @@
-import * as core from "@actions/core";
 import * as github from "@actions/github";
 import { Platform } from "./config";
 import { components } from "@octokit/openapi-types";
-import * as semverSort from "semver/functions/sort";
+import semverSort from "semver/functions/sort";
 
 // Custom types for type narrowing.
 type ListTagsResponse = components["schemas"]["tag"];
