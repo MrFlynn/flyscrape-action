@@ -21,7 +21,7 @@ async function run(): Promise<void> {
     // Download, extract, and execute binary.
     const binaryPath = await binary.saveBinary(assetURL);
     core.debug(
-      `Executing script: ${binaryPath} ${inputs.args.join(" ")} ${inputs.script}`,
+      `Executing script: ${binaryPath} run ${inputs.args.join(" ")} ${inputs.script}`,
     );
     const output = await binary.executeScript(
       binaryPath,
