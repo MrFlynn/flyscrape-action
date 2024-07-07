@@ -56,8 +56,8 @@ export async function getAssetURL(
   const urlPrefix = `https://github.com/${owner}/${repo}/releases/download/${tag}/${repo}_${platform.os}_${platform.arch}`;
   if (data as GetReleaseByTagResponse) {
     for (const asset of data.assets) {
-      if (asset.url.startsWith(urlPrefix)) {
-        return asset.url;
+      if (asset.browser_download_url.startsWith(urlPrefix)) {
+        return asset.browser_download_url;
       }
     }
   }

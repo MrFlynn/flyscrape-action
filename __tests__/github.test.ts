@@ -14,7 +14,7 @@ type ListTagsResponse = components["schemas"]["tag"];
 type OnlyTagName = Pick<ListTagsResponse, "name">;
 type OnlyAssetURLForRelease = DeepPick<
   GetReleaseByTagResponse,
-  "assets.[].url"
+  "assets.[].browser_download_url"
 >;
 
 // Setup mocks
@@ -35,7 +35,7 @@ describe("getAssetURL", () => {
         repos: {
           getReleaseByTag: jest.fn(() => {
             let result: OnlyAssetURLForRelease = {
-              assets: [{ url: expectedURL }],
+              assets: [{ browser_download_url: expectedURL }],
             };
 
             return { data: result };
@@ -68,13 +68,16 @@ describe("getAssetURL", () => {
             let result: OnlyAssetURLForRelease = {
               assets: [
                 {
-                  url: "https://github.com/philippta/flyscrape/releases/download/v0.7.0/flyscrape_linux_amd64.tar.gz",
+                  browser_download_url:
+                    "https://github.com/philippta/flyscrape/releases/download/v0.7.0/flyscrape_linux_amd64.tar.gz",
                 },
                 {
-                  url: "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz",
+                  browser_download_url:
+                    "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz",
                 },
                 {
-                  url: "https://github.com/philippta/flyscrape/releases/download/v0.9.0/flyscrape_linux_amd64.tar.gz",
+                  browser_download_url:
+                    "https://github.com/philippta/flyscrape/releases/download/v0.9.0/flyscrape_linux_amd64.tar.gz",
                 },
               ],
             };
@@ -122,7 +125,7 @@ describe("getAssetURL", () => {
         repos: {
           getReleaseByTag: jest.fn(() => {
             let result: OnlyAssetURLForRelease = {
-              assets: [{ url: expectedURL }],
+              assets: [{ browser_download_url: expectedURL }],
             };
 
             return { data: result };
