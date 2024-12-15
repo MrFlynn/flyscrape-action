@@ -3,9 +3,9 @@ import { DeepPick } from "ts-deep-pick";
 
 import { getOctokit } from "@actions/github";
 import { components } from "@octokit/openapi-types";
+import { arch, platform } from "os";
 
 import { getAssetURL } from "../src/github";
-import { OS, Arch } from "../src/config";
 
 // Custom picked type so we don't need to initialize a giant object.
 type GetReleaseByTagResponse = components["schemas"]["release"];
@@ -18,6 +18,7 @@ type OnlyAssetURLForRelease = DeepPick<
 >;
 
 // Setup mocks
+jest.mock("os");
 jest.mock("@actions/github", () => ({
   getOctokit: jest.fn(),
 }));
@@ -45,10 +46,10 @@ describe("getAssetURL", () => {
     };
 
     (getOctokit as jest.Mock).mockReturnValue(mockOctokit);
+    (arch as jest.Mock).mockReturnValue("x64");
+    (platform as jest.Mock).mockReturnValue("linux");
 
-    expect(await getAssetURL("v0.8.0", { os: OS.Linux, arch: Arch.AMD })).toBe(
-      expectedURL,
-    );
+    expect(await getAssetURL("v0.8.0")).toBe(expectedURL);
   });
 
   it("return v0.9.0 url for latest for linux/amd64", async () => {
@@ -69,11 +70,11 @@ describe("getAssetURL", () => {
               assets: [
                 {
                   browser_download_url:
-                    "https://github.com/philippta/flyscrape/releases/download/v0.7.0/flyscrape_linux_amd64.tar.gz",
+                    "https://github.com/philippta/flyscrape/releases/download/v0.9.0/flyscrape_windows_amd64.tar.gz",
                 },
                 {
                   browser_download_url:
-                    "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz",
+                    "https://github.com/philippta/flyscrape/releases/download/v0.9.0/flyscrape_macos_amd64.tar.gz",
                 },
                 {
                   browser_download_url:
@@ -89,8 +90,10 @@ describe("getAssetURL", () => {
     };
 
     (getOctokit as jest.Mock).mockReturnValue(mockOctokit);
+    (arch as jest.Mock).mockReturnValue("x64");
+    (platform as jest.Mock).mockReturnValue("linux");
 
-    expect(await getAssetURL("latest", { os: OS.Linux, arch: Arch.AMD })).toBe(
+    expect(await getAssetURL("latest")).toBe(
       "https://github.com/philippta/flyscrape/releases/download/v0.9.0/flyscrape_linux_amd64.tar.gz",
     );
   });
@@ -111,9 +114,11 @@ describe("getAssetURL", () => {
     };
 
     (getOctokit as jest.Mock).mockReturnValue(mockOctokit);
+    (arch as jest.Mock).mockReturnValue("x64");
+    (platform as jest.Mock).mockReturnValue("linux");
 
     expect(async () => {
-      await getAssetURL("latest", { os: OS.Linux, arch: Arch.AMD });
+      await getAssetURL("latest");
     }).rejects.toThrow("Could not find flyscrape release latest");
   });
 
@@ -135,9 +140,11 @@ describe("getAssetURL", () => {
     };
 
     (getOctokit as jest.Mock).mockReturnValue(mockOctokit);
+    (arch as jest.Mock).mockReturnValue("x64");
+    (platform as jest.Mock).mockReturnValue("linux");
 
     expect(async () => {
-      await getAssetURL("v0.1.0", { os: OS.Linux, arch: Arch.AMD });
+      await getAssetURL("v0.1.0");
     }).rejects.toThrow(
       "Could not locate flyscrape release for version v0.1.0 on platform linux/amd64",
     );

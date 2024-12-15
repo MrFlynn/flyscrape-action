@@ -1,5 +1,5 @@
 import * as github from "@actions/github";
-import { Platform } from "./config";
+import { Platform } from "./platform";
 import { components } from "@octokit/openapi-types";
 import semverSort from "semver/functions/sort";
 
@@ -40,10 +40,7 @@ async function getTagFromVersion(version: string): Promise<string> {
   throw Error(`Could not find ${repo} release ${version}`);
 }
 
-export async function getAssetURL(
-  version: string,
-  platform: Platform,
-): Promise<string> {
+export async function getAssetURL(version: string): Promise<string> {
   const tag: string = await getTagFromVersion(version);
 
   const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
@@ -53,16 +50,14 @@ export async function getAssetURL(
     tag: tag,
   });
 
-  const urlPrefix = `https://github.com/${owner}/${repo}/releases/download/${tag}/${repo}_${platform.os}_${platform.arch}`;
-  if (data as GetReleaseByTagResponse) {
-    for (const asset of data.assets) {
-      if (asset.browser_download_url.startsWith(urlPrefix)) {
-        return asset.browser_download_url;
-      }
-    }
+  const platform = new Platform();
+  const url = platform.matchReleaseAsset(data);
+
+  if (url !== null && url.includes(tag)) {
+    return url;
   }
 
   throw Error(
-    `Could not locate ${repo} release for version ${version} on platform ${platform.os}/${platform.arch}`,
+    `Could not locate ${repo} release for version ${version} on platform ${platform.platform()}`,
   );
 }
