@@ -47,15 +47,30 @@ async function getTagFromVersion(version: string): Promise<string> {
 export async function getAssetURL(version: string): Promise<string> {
   const tag: string = await getTagFromVersion(version);
 
-  const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
-  const { data } = await octokit.rest.repos.getReleaseByTag({
-    owner: owner,
-    repo: repo,
-    tag: tag,
-  });
+  // The fact that this is necessary is genuinely awful.
+  const getReleaseData = async (): Promise<GetReleaseByTagResponse> => {
+    const { RequestError } = await import("@octokit/request-error");
+
+    try {
+      const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
+      const { data } = await octokit.rest.repos.getReleaseByTag({
+        owner: owner,
+        repo: repo,
+        tag: tag,
+      });
+
+      return data;
+    } catch (error) {
+      if (error instanceof RequestError && error.status == 404) {
+        throw Error(`Version ${version} does not exist for ${owner}/${repo}`);
+      } else {
+        throw error;
+      }
+    }
+  };
 
   const platform = new Platform();
-  const url = platform.matchReleaseAsset(data);
+  const url = platform.matchReleaseAsset(await getReleaseData());
 
   if (url !== null && url.includes(tag)) {
     return url;
