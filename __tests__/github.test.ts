@@ -28,9 +28,7 @@ describe("getAssetURL", () => {
     jest.clearAllMocks();
   });
 
-  it("return url for v0.8.0 for linux/amd64", async () => {
-    const expectedURL =
-      "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz";
+  const mockVersionForTag = async (tag: string, expectedURL: string) => {
     const mockOctokit = {
       rest: {
         repos: {
@@ -49,7 +47,21 @@ describe("getAssetURL", () => {
     (arch as jest.Mock).mockReturnValue("x64");
     (platform as jest.Mock).mockReturnValue("linux");
 
-    expect(await getAssetURL("v0.8.0")).toBe(expectedURL);
+    expect(await getAssetURL(tag)).toBe(expectedURL);
+  };
+
+  it("return url for v0.8.0 for linux/amd64", async () => {
+    await mockVersionForTag(
+      "v0.8.0",
+      "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz",
+    );
+  });
+
+  it("return url for 0.8.0 for linux/amd64", async () => {
+    await mockVersionForTag(
+      "0.8.0",
+      "https://github.com/philippta/flyscrape/releases/download/v0.8.0/flyscrape_linux_amd64.tar.gz",
+    );
   });
 
   it("return v0.9.0 url for latest for linux/amd64", async () => {

@@ -13,7 +13,11 @@ const repo = "flyscrape";
 
 async function getTagFromVersion(version: string): Promise<string> {
   if (version != "latest") {
-    return version;
+    if (version.startsWith("v")) {
+      return version;
+    } else {
+      return "v" + version;
+    }
   }
 
   const octokit = github.getOctokit(process.env.GITHUB_TOKEN);
